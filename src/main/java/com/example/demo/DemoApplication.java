@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.demo.dependency.exception"})
+//@ComponentScan(basePackages = {"com.demo.dependency.exception"})
 //@ComponentScan(basePackageClasses = UserController.class)
 //@ComponentScan(basePackageClasses = PostController.class)
 //@ComponentScan({"com.delivery.request"})

@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class Like {
 
     @Id
-    private Long id;
+    private Long likeId;
 
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -13,7 +14,8 @@ import javax.persistence.*;
 public class Post {
 
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long postId;
     private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)
