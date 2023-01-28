@@ -24,7 +24,5 @@ public class Post {
     @JsonIgnore
     User user;
 
-    @Lob
-    @Column(columnDefinition = "text")
     private String text;
 }

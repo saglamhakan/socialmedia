@@ -15,9 +15,9 @@ import java.util.Optional;
 @Service
 public class CommentService {
 
-    private CommentRepository commentRepository;
-    private UserService userService;
-    private PostService postService;
+    private final CommentRepository commentRepository;
+    private final UserService userService;
+    private final PostService postService;
 
     @Autowired
     public CommentService(CommentRepository commentRepository, UserService userService, PostService postService) {
@@ -28,11 +28,11 @@ public class CommentService {
 
     public List<Comment> getAllCommentsWithParam(Optional<Long> userId, Optional<Long> postId) {
         if (userId.isPresent() && postId.isPresent()) {
-            return commentRepository.findByUserIdAndPostId(userId.get(), postId.get());
+            return commentRepository.findByUser_UserIdAndPost_PostId(userId.get(), postId.get());
         } else if (userId.isPresent()) {
-            return commentRepository.findByUserId(userId.get());
+            return commentRepository.findByUser_UserId(userId.get());
         } else if (postId.isPresent()) {
-            return commentRepository.findByPostId(postId.get());
+            return commentRepository.findByPost_PostId(postId.get());
         } else
             return commentRepository.findAll();
     }
