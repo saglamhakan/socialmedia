@@ -14,9 +14,9 @@ import java.util.Optional;
 @Service
 public class PostService {
 
-   private PostRepository postRepository;
+   private final PostRepository postRepository;
 
-   private UserService userService;
+   private final UserService userService;
 
     @Autowired
     public PostService( PostRepository postRepository, UserService userService) {

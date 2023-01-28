@@ -28,7 +28,5 @@ public class Comment {
     @JsonIgnore
     User user;
 
-    @Lob
-    @Column(columnDefinition = "text")
     private String text;
 }

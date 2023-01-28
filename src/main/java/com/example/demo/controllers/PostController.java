@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequestMapping("/posts")
 public class PostController {
 
-    private PostService postService;
+    private final PostService postService;
 
     @Autowired
     public PostController(PostService postService) {
