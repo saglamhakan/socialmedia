@@ -1,11 +1,16 @@
 package com.example.demo.services;
 
+import com.example.demo.dataAccess.CommentRepository;
+import com.example.demo.dataAccess.LikeRepository;
+import com.example.demo.dataAccess.PostRepository;
 import com.example.demo.dataAccess.UserRepository;
+import com.example.demo.entities.Comment;
+import com.example.demo.entities.Like;
 import com.example.demo.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,9 +18,19 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
+    private LikeRepository likeRepository;
+
+    private CommentRepository commentRepository;
+
+    private PostRepository postRepository;
+
+
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, LikeRepository likeRepository, CommentRepository commentRepository, PostRepository postRepository) {
         this.userRepository = userRepository;
+        this.likeRepository = likeRepository;
+        this.commentRepository = commentRepository;
+        this.postRepository = postRepository;
     }
 
 
@@ -45,5 +60,21 @@ public class UserService {
 
     public void deleteById(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    public User getOneUserByUserName(String userName) {
+        return userRepository.findByUserName(userName);
+    }
+
+    public List<Object> getUserActivity(Long userId) {
+        List<Long> postIds = postRepository.findTopByUserId(userId);
+        if (postIds.isEmpty())
+            return null;
+        List<Object> comments = commentRepository.findUserCommentsByPostId(postIds);
+        List<Object> likes = likeRepository.findUserLikesByPostId(postIds);
+        List<Object> result=new ArrayList<>();
+        result.addAll(comments);
+        result.addAll(likes);
+        return result;
     }
 }

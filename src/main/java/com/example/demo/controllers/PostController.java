@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.entities.Post;
 import com.example.demo.request.PostCreateRequest;
 import com.example.demo.request.PostUpdateRequest;
+import com.example.demo.response.PostResponse;
 import com.example.demo.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,15 +23,15 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping
-    public List<Post> getAllPosts(@RequestParam Optional<Long> userId){
+    @GetMapping("/getAll")
+    public List<PostResponse> getAllPosts(@RequestParam Optional<Long> userId){
        return postService.getAllPosts(userId);
 
     }
 
     @GetMapping("/{postId}")
-    public Post getOnePost(@PathVariable Long postId){
-        return postService.getOnePostById(postId);
+    public PostResponse getOnePost(@PathVariable Long postId){
+        return postService.getOnePostByIdWithLikes(postId);
     }
 
     @PostMapping("/add")

@@ -1,34 +1,54 @@
 package com.example.demo.services;
 
 import com.example.demo.dataAccess.PostRepository;
+import com.example.demo.entities.Like;
 import com.example.demo.entities.Post;
 import com.example.demo.entities.User;
 import com.example.demo.request.PostCreateRequest;
 import com.example.demo.request.PostUpdateRequest;
+import com.example.demo.response.LikeResponse;
+import com.example.demo.response.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
 
-   private final PostRepository postRepository;
+    private final PostRepository postRepository;
 
-   private final UserService userService;
+    private final UserService userService;
+
+    private LikeService likeService;
 
     @Autowired
-    public PostService( PostRepository postRepository, UserService userService) {
+    public PostService(PostRepository postRepository, UserService userService) {
         this.postRepository = postRepository;
-        this.userService=userService;
+        this.userService = userService;
+
+
+    }
+
+    public void setLikeService(LikeService likeService) {
+        this.likeService = likeService;
     }
 
 
-    public List<Post> getAllPosts(Optional<Long> userId) {
-        if (userId.isPresent())
-            return postRepository.getByUser_UserId(userId.get());
-        return postRepository.findAll();
+    public List<PostResponse> getAllPosts(Optional<Long> userId) {
+        List<Post> list;
+        if (userId.isPresent()) {
+            list = postRepository.getByUser_UserId(userId.get());
+        } else
+            list = postRepository.findAll();
+        return list.stream().map(p -> {
+            List<LikeResponse> likes = likeService.getAllLikesWithParam(Optional.ofNullable(null), Optional.of(p.getPostId()));
+            return new PostResponse(p, likes);
+        }).collect(Collectors.toList());
+
     }
 
     public Post getOnePostById(Long postId) {
@@ -36,24 +56,32 @@ public class PostService {
     }
 
 
-    public Post createOnePost(PostCreateRequest newPostRequest) {
-      User user =  userService.getOneUserById(newPostRequest.getUserId());
-      if (user==null)
-          return null;
+    public PostResponse getOnePostByIdWithLikes(Long postId) {
+        Post post = postRepository.findById(postId).orElse(null);
+        List<LikeResponse> likes = likeService.getAllLikesWithParam(Optional.ofNullable(null), Optional.of(postId));
+        return new PostResponse(post, likes);
+    }
 
-      Post toSave=new Post();
-      toSave.setPostId(newPostRequest.getId());
-      toSave.setText(newPostRequest.getText());
-      toSave.setTitle(newPostRequest.getTitle());
-      toSave.setUser(user);
+
+    public Post createOnePost(PostCreateRequest newPostRequest) {
+        User user = userService.getOneUserById(newPostRequest.getUserId());
+        if (user == null)
+            return null;
+
+        Post toSave = new Post();
+        toSave.setPostId(newPostRequest.getPostId());
+        toSave.setText(newPostRequest.getText());
+        toSave.setTitle(newPostRequest.getTitle());
+        toSave.setCreateDate(new Date());
+        toSave.setUser(user);
 
         return postRepository.save(toSave);
     }
 
     public Post updateOnePostById(Long postId, PostUpdateRequest updatePost) {
-        Optional<Post> post=postRepository.findById(postId);
-        if (post.isPresent()){
-            Post toUpdate=post.get();
+        Optional<Post> post = postRepository.findById(postId);
+        if (post.isPresent()) {
+            Post toUpdate = post.get();
             toUpdate.setText(updatePost.getText());
             toUpdate.setTitle(updatePost.getTitle());
             postRepository.save(toUpdate);
@@ -63,6 +91,6 @@ public class PostService {
     }
 
     public void deleteOnePostById(Long postId) {
-         postRepository.deleteById(postId);
+        postRepository.deleteById(postId);
     }
 }

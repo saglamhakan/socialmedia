@@ -6,11 +6,14 @@ import com.example.demo.entities.Post;
 import com.example.demo.entities.User;
 import com.example.demo.request.CommentCreateRequest;
 import com.example.demo.request.CommentUpdateRequest;
+import com.example.demo.response.CommentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -26,16 +29,19 @@ public class CommentService {
         this.postService = postService;
     }
 
-    public List<Comment> getAllCommentsWithParam(Optional<Long> userId, Optional<Long> postId) {
+    public List<CommentResponse> getAllCommentsWithParam(Optional<Long> userId, Optional<Long> postId) {
+        List<Comment> comments;
         if (userId.isPresent() && postId.isPresent()) {
-            return commentRepository.findByUser_UserIdAndPost_PostId(userId.get(), postId.get());
+            comments = commentRepository.findByUser_UserIdAndPost_PostId(userId.get(), postId.get());
         } else if (userId.isPresent()) {
-            return commentRepository.findByUser_UserId(userId.get());
+            comments = commentRepository.findByUser_UserId(userId.get());
         } else if (postId.isPresent()) {
-            return commentRepository.findByPost_PostId(postId.get());
+            comments = commentRepository.findByPost_PostId(postId.get());
         } else
-            return commentRepository.findAll();
+            comments = commentRepository.findAll();
+        return comments.stream().map(comment -> new CommentResponse(comment)).collect(Collectors.toList());
     }
+
 
 
     public Comment getOneCommentById(Long commentId) {
@@ -48,9 +54,10 @@ public class CommentService {
         if (user != null && post != null) {
 
             Comment commentToSave = new Comment();
-            commentToSave.setCommentId(request.getId());
+            commentToSave.setId(request.getId());
             commentToSave.setPost(post);
             commentToSave.setUser(user);
+            commentToSave.setCreateDate(new Date());
             commentToSave.setText(request.getText());
 
             return commentRepository.save(commentToSave);
