@@ -1,32 +1,22 @@
 package com.example.demo.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Date;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
+@Table(name = "refresh_token")
 @Data
-@Table(name = "comment")
-public class Comment {
+public class RefreshToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -34,9 +24,10 @@ public class Comment {
     @JsonIgnore
     User user;
 
-    private String text;
+    @Column(nullable = false, unique = true)
+    String token;
 
-
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    Date createDate;
+    Date expiryDate;
 }
