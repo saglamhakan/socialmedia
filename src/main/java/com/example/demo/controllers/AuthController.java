@@ -48,6 +48,7 @@ public class AuthController {
         AuthResponse authResponse=new AuthResponse();
         authResponse.setAccessToken("Bearer " +jwtToken);
         authResponse.setRefreshToken(refreshTokenService.createRefreshToken(user));
+        authResponse.setMessage("User login success");
         authResponse.setUserId(user.getUserId());
         return authResponse;
     }

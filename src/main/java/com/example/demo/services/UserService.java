@@ -8,6 +8,7 @@ import com.example.demo.entities.Comment;
 import com.example.demo.entities.Like;
 import com.example.demo.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -59,9 +60,12 @@ public class UserService {
     }
 
     public void deleteById(Long userId) {
-        userRepository.deleteById(userId);
+        try {
+            userRepository.deleteById(userId);
+        }catch (EmptyResultDataAccessException e){
+            System.out.println("+User "+userId+" doesn't exist" );
+        }
     }
-
     public User getOneUserByUserName(String userName) {
         return userRepository.findByUserName(userName);
     }
