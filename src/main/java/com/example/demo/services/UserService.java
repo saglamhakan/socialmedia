@@ -4,9 +4,8 @@ import com.example.demo.dataAccess.CommentRepository;
 import com.example.demo.dataAccess.LikeRepository;
 import com.example.demo.dataAccess.PostRepository;
 import com.example.demo.dataAccess.UserRepository;
-import com.example.demo.entities.Comment;
-import com.example.demo.entities.Like;
 import com.example.demo.entities.User;
+import com.example.demo.response.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -35,8 +34,18 @@ public class UserService {
     }
 
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+
+        List<User> users=userRepository.findAll();
+        List<UserResponse> userResponses=new ArrayList<UserResponse>();
+
+        for (User user:users){
+            UserResponse foundUser=new UserResponse(user);
+            foundUser.setUserName(user.getUserName());
+            userResponses.add(foundUser);
+        }
+
+        return userResponses;
     }
 
     public User saveOneUser(User newUser) {

@@ -6,12 +6,9 @@ import lombok.Data;
 @Data
 public class CommentResponse {
 
-
-
     Long id;
     Long userId;
     String text;
-
     String userName;
 
     public CommentResponse(Comment entity) {
@@ -21,7 +18,5 @@ public class CommentResponse {
         this.text = entity.getText();
 
     }
-
-
 
 }

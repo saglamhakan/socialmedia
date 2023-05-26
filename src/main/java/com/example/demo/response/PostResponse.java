@@ -14,13 +14,19 @@ public class PostResponse {
     String title;
     String text;
 
-    List<LikeResponse> postLikes;
-    public PostResponse(Post entity, List<LikeResponse> likes){
-        this.postId=entity.getPostId();
-        this.userId=entity.getUser().getUserId();
-        this.userName=entity.getUser().getUserName();
-        this.title=entity.getTitle();
-        this.text=entity.getText();
-        this.postLikes=likes;
+
+
+
+
+    public PostResponse(Post post) {
+        this.postId=post.getPostId();
+        this.userId=post.getUser().getUserId();
+        this.userName=post.getUser().getUserName();
+        this.text= post.getText();
+        this.title= post.getTitle();
+
+
+
     }
 }
+

@@ -1,6 +1,5 @@
 package com.example.demo.controllers;
 
-import com.example.demo.dataAccess.UserRepository;
 import com.example.demo.entities.User;
 import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.response.UserResponse;
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -25,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping("/getAll")
-    public List<User> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         return userService.getAllUsers();
     }
 

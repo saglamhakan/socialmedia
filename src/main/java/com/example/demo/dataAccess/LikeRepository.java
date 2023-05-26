@@ -2,13 +2,16 @@ package com.example.demo.dataAccess;
 
 import com.example.demo.entities.Comment;
 import com.example.demo.entities.Like;
+import com.example.demo.response.LikeResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -24,5 +27,7 @@ public interface LikeRepository extends JpaRepository<Like,Long> {
                     +"where l.post_id in :postIds limit 5",
             nativeQuery = true)
     List<Object> findUserLikesByPostId(@Param("postIds") List<Long> postIds);
+
+
 
 }

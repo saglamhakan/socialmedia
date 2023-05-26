@@ -1,14 +1,17 @@
 package com.example.demo.services;
 
+import com.example.demo.dataAccess.LikeRepository;
 import com.example.demo.dataAccess.PostRepository;
 import com.example.demo.entities.Like;
 import com.example.demo.entities.Post;
 import com.example.demo.entities.User;
 import com.example.demo.request.PostCreateRequest;
 import com.example.demo.request.PostUpdateRequest;
+import com.example.demo.response.CommentResponse;
 import com.example.demo.response.LikeResponse;
 import com.example.demo.response.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -23,43 +26,25 @@ public class PostService {
 
     private final UserService userService;
 
-    private LikeService likeService;
+
+
 
     @Autowired
-    public PostService(PostRepository postRepository, UserService userService) {
+    public PostService(PostRepository postRepository, UserService userService
+                       ) {
         this.postRepository = postRepository;
         this.userService = userService;
 
-
     }
 
-    public void setLikeService(LikeService likeService) {
-        this.likeService = likeService;
-    }
-
-
-    public List<PostResponse> getAllPosts(Optional<Long> userId) {
-        List<Post> list;
-        if (userId.isPresent()) {
-            list = postRepository.getByUser_UserId(userId.get());
-        } else
-            list = postRepository.findAll();
-        return list.stream().map(p -> {
-            List<LikeResponse> likes = likeService.getAllLikesWithParam(Optional.ofNullable(null), Optional.of(p.getPostId()));
-            return new PostResponse(p, likes);
-        }).collect(Collectors.toList());
-
-    }
 
     public Post getOnePostById(Long postId) {
         return postRepository.findById(postId).orElse(null);
     }
 
 
-    public PostResponse getOnePostByIdWithLikes(Long postId) {
-        Post post = postRepository.findById(postId).orElse(null);
-        List<LikeResponse> likes = likeService.getAllLikesWithParam(Optional.ofNullable(null), Optional.of(postId));
-        return new PostResponse(post, likes);
+    public Post getOnePostByIdWithLikes(Long postId) {
+        return postRepository.findById(postId).orElse(null);
     }
 
 
@@ -69,7 +54,6 @@ public class PostService {
             return null;
 
         Post toSave = new Post();
-        toSave.setPostId(newPostRequest.getPostId());
         toSave.setText(newPostRequest.getText());
         toSave.setTitle(newPostRequest.getTitle());
         toSave.setCreateDate(new Date());
@@ -93,4 +77,15 @@ public class PostService {
     public void deleteOnePostById(Long postId) {
         postRepository.deleteById(postId);
     }
-}
+
+    public List<PostResponse> getAllPosts(Optional<Long> userId) {
+        List<Post> posts;
+        if(userId.isPresent()){
+            posts=postRepository.findByUser_UserId(userId.get());
+        }else
+          posts = postRepository.findAll();
+        return posts.stream().map(post -> new PostResponse(post)).collect(Collectors.toList());
+    }
+
+    }
+

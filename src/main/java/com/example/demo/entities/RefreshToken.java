@@ -24,7 +24,7 @@ public class RefreshToken {
     @JsonIgnore
     User user;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true) //unique, tokenın kişiye özel  üretildiği için yazılmıştır.
     String token;
 
     @Column(nullable = false)

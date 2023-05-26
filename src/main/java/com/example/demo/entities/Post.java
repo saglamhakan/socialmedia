@@ -20,7 +20,6 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long postId;
 
     private String title;
@@ -35,4 +34,6 @@ public class Post {
 
     @Temporal(TemporalType.TIMESTAMP)
     Date createDate;
+
+
 }
