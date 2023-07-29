@@ -23,7 +23,6 @@ public class LikeService {
     private final PostService postService;
 
 
-    @Autowired
     public LikeService(LikeRepository likeRepository, UserService userService, PostService postService) {
         this.likeRepository = likeRepository;
         this.userService = userService;
@@ -50,7 +49,6 @@ public class LikeService {
         if (user != null && post != null) {
 
             Like likeToSave = new Like();
-            likeToSave.setId(newLikeRequest.getId());
             likeToSave.setUser(user);
             likeToSave.setPost(post);
 

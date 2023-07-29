@@ -2,6 +2,8 @@ package com.example.demo.controllers;
 
 import com.example.demo.entities.User;
 import com.example.demo.exceptions.UserNotFoundException;
+import com.example.demo.request.UserCreateRequest;
+import com.example.demo.request.UserUpdateRequest;
 import com.example.demo.response.UserResponse;
 import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import java.util.List;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/users")
 public class UserController {
 
@@ -28,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public User createUser(@RequestBody User newUser) {
+    public User createUser(@RequestBody UserCreateRequest newUser) {
         return userService.saveOneUser(newUser);
     }
 
@@ -41,13 +44,13 @@ public class UserController {
         return new UserResponse(user);
     }
 
-    @PutMapping("/{userId}")
-    public User updateOneUser(@PathVariable Long userId, @RequestBody User newUser) {
+    @PutMapping("/update/{userId}")
+    public User updateOneUser(@PathVariable Long userId, @RequestBody UserUpdateRequest newUser) {
         return userService.updateOneUser(userId, newUser);
 
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/delete/{userId}")
     public void deleteOneUser(@PathVariable Long userId) {
         userService.deleteById(userId);
     }

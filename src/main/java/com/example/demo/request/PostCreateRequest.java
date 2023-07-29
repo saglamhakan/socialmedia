@@ -14,6 +14,5 @@ public class PostCreateRequest {
 
     Long userId;
 
-    Date createDate;
 
 }

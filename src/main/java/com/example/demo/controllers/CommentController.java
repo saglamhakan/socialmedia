@@ -33,7 +33,7 @@ public class CommentController {
         return commentService.createOneComment(request);
     }
 
-    @GetMapping("/{commentId}")
+    @GetMapping("/update")
     public Comment getOneComment(@PathVariable Long commentId) {
         return commentService.getOneCommentById(commentId);
     }

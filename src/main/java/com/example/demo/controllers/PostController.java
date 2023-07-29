@@ -39,7 +39,7 @@ public class PostController {
         return postService.createOnePost(newPostRequest);
     }
 
-    @PutMapping("/{postId}")
+    @PutMapping("/update")
     public Post updateOnePost(@PathVariable Long postId, @RequestBody PostUpdateRequest updatePost){
         return postService.updateOnePostById(postId, updatePost);
     }

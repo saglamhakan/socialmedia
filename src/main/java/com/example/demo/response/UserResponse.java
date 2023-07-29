@@ -5,14 +5,11 @@ import lombok.Data;
 
 @Data
 public class UserResponse {
-
-
-
-  //  Long userId;
+    Long userId;
     String userName;
 
     public UserResponse(User entity) {
-      //  this.userId =entity.getUserId();
+        this.userId =entity.getUserId();
         this.userName = entity.getUserName();
     }
 }

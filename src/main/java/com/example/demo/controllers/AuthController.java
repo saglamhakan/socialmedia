@@ -3,7 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.entities.RefreshToken;
 import com.example.demo.entities.User;
 import com.example.demo.request.RefreshRequest;
-import com.example.demo.request.UserRequest;
+import com.example.demo.request.UserCreateRequest;
 import com.example.demo.response.AuthResponse;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.services.RefreshTokenService;
@@ -38,7 +38,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody UserRequest loginRequest) {
+    public AuthResponse login(@RequestBody UserCreateRequest loginRequest) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword());
         Authentication auth = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
@@ -54,7 +54,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody UserRequest registerRequest) {
+    public ResponseEntity<AuthResponse> register(@RequestBody UserCreateRequest registerRequest) {
         AuthResponse authResponse=new AuthResponse();
         if (userService.getOneUserByUserName(registerRequest.getUserName())!= null){
             authResponse.setMessage("Username already in use");
@@ -63,7 +63,7 @@ public class AuthController {
         User user=new User();
         user.setUserName(registerRequest.getUserName());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        userService.saveOneUser(user);
+        userService.saveOneUser(new UserCreateRequest()); //Sorun çıkarsa userla değiştir
 
         UsernamePasswordAuthenticationToken authToken= new UsernamePasswordAuthenticationToken(registerRequest.getUserName(),registerRequest.getPassword());
         Authentication auth=authenticationManager.authenticate(authToken);

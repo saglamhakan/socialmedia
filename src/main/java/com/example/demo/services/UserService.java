@@ -5,6 +5,8 @@ import com.example.demo.dataAccess.LikeRepository;
 import com.example.demo.dataAccess.PostRepository;
 import com.example.demo.dataAccess.UserRepository;
 import com.example.demo.entities.User;
+import com.example.demo.request.UserCreateRequest;
+import com.example.demo.request.UserUpdateRequest;
 import com.example.demo.response.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -18,14 +20,15 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    private LikeRepository likeRepository;
+    private final LikeRepository likeRepository;
 
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
 
 
-    @Autowired
+
+
     public UserService(UserRepository userRepository, LikeRepository likeRepository, CommentRepository commentRepository, PostRepository postRepository) {
         this.userRepository = userRepository;
         this.likeRepository = likeRepository;
@@ -42,21 +45,25 @@ public class UserService {
         for (User user:users){
             UserResponse foundUser=new UserResponse(user);
             foundUser.setUserName(user.getUserName());
+            foundUser.setUserId(user.getUserId());
             userResponses.add(foundUser);
         }
 
         return userResponses;
     }
 
-    public User saveOneUser(User newUser) {
-        return userRepository.save(newUser);
+    public User saveOneUser(UserCreateRequest newUser) {
+         User user = new User();
+         user.setUserName(newUser.getUserName());
+         user.setPassword(newUser.getPassword());
+        return userRepository.save(user);
     }
 
     public User getOneUserById(Long userId) {
         return userRepository.findById(userId).orElse(null);
     }
 
-    public User updateOneUser(Long userId, User newUser) {
+    public User updateOneUser(Long userId, UserUpdateRequest newUser) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
             User foundUser = user.get();
