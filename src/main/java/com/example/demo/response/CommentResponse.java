@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class CommentResponse {
+    Long postId;
 
     Long id;
     Long userId;
@@ -12,10 +13,11 @@ public class CommentResponse {
     String userName;
 
     public CommentResponse(Comment entity) {
-        this.userName=entity.getUser().getUserName();
+        this.userName = entity.getUser().getUserName();
         this.id = entity.getId();
         this.userId = entity.getUser().getUserId();
         this.text = entity.getText();
+        this.postId=entity.getPost().getPostId();
 
     }
 

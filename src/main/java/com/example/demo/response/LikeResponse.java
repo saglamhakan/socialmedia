@@ -5,13 +5,13 @@ import lombok.Data;
 
 @Data
 public class LikeResponse {
-    Long id;
+    Long likeId;
     Long userId;
     Long postId;
 
 
     public LikeResponse(Like entity){
-        this.id=entity.getId();
+        this.likeId =entity.getLikeId();
         this.postId=entity.getPost().getPostId();
         this.userId=entity.getUser().getUserId();
     }

@@ -54,7 +54,6 @@ public class CommentService {
         if (user != null && post != null) {
 
             Comment commentToSave = new Comment();
-            commentToSave.setId(request.getId());
             commentToSave.setPost(post);
             commentToSave.setUser(user);
             commentToSave.setCreateDate(new Date());
@@ -77,7 +76,7 @@ public class CommentService {
             return null;
     }
 
-    public void deleteOneCommentById(Long commentId) {
-        commentRepository.deleteById(commentId);
+    public void deleteOneCommentById(Long id) {
+        commentRepository.deleteById(id);
     }
 }

@@ -28,7 +28,6 @@ public class PostService {
 
 
 
-
     public PostService(PostRepository postRepository, UserService userService
                        ) {
         this.postRepository = postRepository;
@@ -86,5 +85,5 @@ public class PostService {
         return posts.stream().map(post -> new PostResponse(post)).collect(Collectors.toList());
     }
 
-    }
+}
 

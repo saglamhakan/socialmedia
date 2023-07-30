@@ -36,7 +36,7 @@ public class LikeController {
         return likeService.getOneLikeById(likeId);
     }
 
-    @PutMapping("/{likeId}")
+    @PutMapping("/update/{likeId}")
     public Like updateOneLike(@PathVariable Long likeId){
         return likeService.updateOneLikeById(likeId);
     }
